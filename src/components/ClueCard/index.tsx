@@ -13,6 +13,10 @@ interface ClueCardProps {
 }
 
 const ClueCard: React.FC<ClueCardProps> = ({ clue, showFeedback = true, onClick }) => {
+  const latestFeedback = clue.timeline
+    .filter((e) => e.type === 'status_change')
+    .pop();
+
   return (
     <View className={styles.card} onClick={onClick}>
       <View className={styles.header}>
@@ -27,10 +31,10 @@ const ClueCard: React.FC<ClueCardProps> = ({ clue, showFeedback = true, onClick 
 
       <Text className={styles.summary}>{clue.content}</Text>
 
-      {showFeedback && clue.feedback && (
+      {showFeedback && latestFeedback && (
         <View className={styles.feedbackPreview}>
           <Text className={styles.feedbackLabel}>总部反馈</Text>
-          <Text className={styles.feedbackText}>{clue.feedback}</Text>
+          <Text className={styles.feedbackText}>{latestFeedback.content}</Text>
         </View>
       )}
 

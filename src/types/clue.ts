@@ -13,6 +13,23 @@ export type ClueStatus = 'pending' | 'adopted' | 'supplement' | 'closed';
 
 export type SpreadScope = 'local' | 'regional' | 'national' | 'international';
 
+export interface TimelineEvent {
+  id: string;
+  type: 'submit' | 'status_change' | 'supplement' | 'feedback';
+  status?: ClueStatus;
+  content: string;
+  operator: string;
+  timestamp: string;
+}
+
+export interface SupplementData {
+  id: string;
+  content: string;
+  mediaUrl?: string;
+  screenshots?: string[];
+  createdAt: string;
+}
+
 export interface Clue {
   id: string;
   title: string;
@@ -26,9 +43,9 @@ export interface Clue {
   urgency: UrgencyLevel;
   status: ClueStatus;
   createdAt: string;
-  feedback?: string;
-  supplementRequired?: string[];
   analysisLevel?: 'high' | 'medium' | 'low';
+  timeline: TimelineEvent[];
+  supplements: SupplementData[];
 }
 
 export interface RiskItem {

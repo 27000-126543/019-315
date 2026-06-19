@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { View, Text, Image, ScrollView } from '@tarojs/components';
+import React, { useMemo, useState } from 'react';
+import { View, Text, Input, Textarea, Image, ScrollView, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
@@ -14,7 +14,11 @@ import {
 
 const DetailPage: React.FC = () => {
   const router = useRouter();
-  const { clues } = useClue();
+  const { clues, addSupplement } = useClue();
+  const [showSupplementForm, setShowSupplementForm] = useState(false);
+  const [suppContent, setSuppContent] = useState('');
+  const [suppMediaUrl, setSuppMediaUrl] = useState('');
+  const [suppScreenshots, setSuppScreenshots] = useState<string[]>([]);
 
   const clue = useMemo(() => {
     const id = router.params.id;
@@ -22,29 +26,56 @@ const DetailPage: React.FC = () => {
     return clues.find((c) => c.id === id);
   }, [clues, router.params.id]);
 
-  useEffect(() => {
-    if (!router.params.id) {
-      Taro.showToast({
-        title: '线索不存在',
-        icon: 'none'
-      });
-    }
-  }, [router.params.id]);
-
-  const handlePreviewImage = (url: string) => {
-    console.log('[DetailPage] 预览图片:', url);
-    if (clue?.screenshots && clue.screenshots.length > 0) {
-      Taro.previewImage({
-        current: url,
-        urls: clue.screenshots
-      });
-    }
+  const handlePreviewImage = (current: string, urls: string[]) => {
+    Taro.previewImage({ current, urls });
   };
 
-  const analysisLabels = {
-    high: '高风险',
-    medium: '中风险',
-    low: '低风险'
+  const handleSuppChooseImage = () => {
+    const remaining = 9 - suppScreenshots.length;
+    if (remaining <= 0) {
+      Taro.showToast({ title: '最多上传9张', icon: 'none' });
+      return;
+    }
+    Taro.chooseImage({
+      count: remaining,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        setSuppScreenshots((prev) => [...prev, ...res.tempFilePaths]);
+      },
+      fail: (err) => {
+        console.error('[DetailPage] 选择图片失败:', err);
+      }
+    });
+  };
+
+  const handleSuppDeleteImage = (index: number) => {
+    setSuppScreenshots((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSuppSubmit = () => {
+    if (!clue) return;
+    if (!suppContent.trim() && !suppMediaUrl.trim() && suppScreenshots.length === 0) {
+      Taro.showToast({ title: '请填写补充内容', icon: 'none' });
+      return;
+    }
+    console.log('[DetailPage] 提交补充材料:', clue.id);
+    addSupplement(clue.id, {
+      content: suppContent.trim(),
+      mediaUrl: suppMediaUrl.trim() || undefined,
+      screenshots: suppScreenshots.length > 0 ? suppScreenshots : undefined
+    });
+    setSuppContent('');
+    setSuppMediaUrl('');
+    setSuppScreenshots([]);
+    setShowSupplementForm(false);
+    Taro.showToast({ title: '补充材料已提交', icon: 'success' });
+  };
+
+  const timelineTypeClass: Record<string, string> = {
+    submit: styles.submit,
+    status_change: styles.statusChange,
+    supplement: styles.supplement
   };
 
   if (!clue) {
@@ -94,91 +125,147 @@ const DetailPage: React.FC = () => {
         </View>
       </View>
 
-      {/* 线索内容 */}
+      {/* 原始线索内容 */}
       <View className={styles.section}>
-        <Text className={styles.sectionTitle}>线索描述</Text>
+        <Text className={styles.sectionTitle}>原始线索</Text>
         {clue.content ? (
           <Text className={styles.contentText}>{clue.content}</Text>
         ) : (
-          <Text className={styles.contentText} style={{ color: '$color-text-tertiary' }}>
-            （无文字描述）
-          </Text>
+          <Text className={styles.contentText} style={{ color: '#94A3B8' }}>（无文字描述）</Text>
+        )}
+        {clue.mediaUrl && (
+          <View style={{ marginTop: '16rpx' }}>
+            <Text className={styles.urlBox}>🔗 {clue.mediaUrl}</Text>
+          </View>
+        )}
+        {clue.screenshots && clue.screenshots.length > 0 && (
+          <View style={{ marginTop: '16rpx' }}>
+            <Text style={{ fontSize: '24rpx', color: '#64748B', marginBottom: '12rpx', display: 'block' }}>
+              截图（{clue.screenshots.length}张）
+            </Text>
+            <View className={styles.screenshotGrid}>
+              {clue.screenshots.map((url, idx) => (
+                <View
+                  key={idx}
+                  className={styles.screenshotItem}
+                  onClick={() => handlePreviewImage(url, clue.screenshots!)}
+                >
+                  <Image className={styles.screenshotImg} src={url} mode="aspectFill" />
+                </View>
+              ))}
+            </View>
+          </View>
         )}
       </View>
 
-      {/* 媒体链接 */}
-      {clue.mediaUrl && (
+      {/* 补充材料 */}
+      {clue.supplements.length > 0 && (
         <View className={styles.section}>
-          <Text className={styles.sectionTitle}>媒体链接</Text>
-          <View className={styles.urlBox}>🔗 {clue.mediaUrl}</View>
+          <Text className={styles.sectionTitle}>补充材料（{clue.supplements.length}次）</Text>
+          {clue.supplements.map((supp) => (
+            <View key={supp.id} className={styles.supplementCard}>
+              <Text className={styles.supplementLabel}>补充 #{supp.id.substring(0, 4)}</Text>
+              <Text className={styles.supplementTime}>{supp.createdAt}</Text>
+              {supp.content && (
+                <Text className={styles.supplementText}>{supp.content}</Text>
+              )}
+              {supp.mediaUrl && (
+                <View style={{ marginTop: '8rpx' }}>
+                  <Text className={styles.urlBox}>🔗 {supp.mediaUrl}</Text>
+                </View>
+              )}
+              {supp.screenshots && supp.screenshots.length > 0 && (
+                <View style={{ marginTop: '8rpx' }}>
+                  <View className={styles.screenshotGrid}>
+                    {supp.screenshots.map((url, idx) => (
+                      <View
+                        key={idx}
+                        className={styles.screenshotItem}
+                        onClick={() => handlePreviewImage(url, supp.screenshots!)}
+                      >
+                        <Image className={styles.screenshotImg} src={url} mode="aspectFill" />
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </View>
+          ))}
         </View>
       )}
 
-      {/* 截图 */}
-      {clue.screenshots && clue.screenshots.length > 0 && (
+      {/* 补充材料按钮/表单 */}
+      {(clue.status === 'supplement' || clue.status === 'adopted' || clue.status === 'pending') && (
         <View className={styles.section}>
-          <Text className={styles.sectionTitle}>截图照片（{clue.screenshots.length}张）</Text>
-          <View className={styles.screenshotGrid}>
-            {clue.screenshots.map((url, idx) => (
-              <View
-                key={idx}
-                className={styles.screenshotItem}
-                onClick={() => handlePreviewImage(url)}
-              >
-                <Image
-                  className={styles.screenshotImg}
-                  src={url}
-                  mode="aspectFill"
-                />
-              </View>
-            ))}
-          </View>
-        </View>
-      )}
-
-      {/* 总部反馈 */}
-      <View className={styles.section}>
-        <Text className={styles.sectionTitle}>总部反馈</Text>
-
-        {clue.status === 'pending' ? (
-          <View className={styles.pendingTip}>
-            <Text className={styles.tipIcon}>⏳</Text>
-            <Text className={styles.tipText}>
-              线索已提交，总部正在研判中
-              {'\n'}一般会在24小时内给出反馈
-            </Text>
-          </View>
-        ) : (
-          <View className={styles.feedbackSection}>
-            <Text className={styles.feedbackLabel}>
-              {clue.status === 'adopted' && '✅ 已采纳'}
-              {clue.status === 'supplement' && '📝 待补充'}
-              {clue.status === 'closed' && '📁 已关闭'}
-            </Text>
-            {clue.feedback && (
-              <Text className={styles.feedbackText}>{clue.feedback}</Text>
-            )}
-
-            {clue.analysisLevel && (
-              <View
-                className={classnames(styles.analysisBadge, styles[clue.analysisLevel])}
-              >
-                研判等级：{analysisLabels[clue.analysisLevel]}
-              </View>
-            )}
-
-            {clue.supplementRequired && clue.supplementRequired.length > 0 && (
-              <View className={styles.supplementList}>
-                <Text className={styles.supplementTitle}>需要补充的信息：</Text>
-                {clue.supplementRequired.map((item, idx) => (
-                  <Text key={idx} className={styles.supplementItem}>
-                    {item}
-                  </Text>
+          {!showSupplementForm ? (
+            <Button className={styles.addSupplementBtn} onClick={() => setShowSupplementForm(true)}>
+              ✏️ 补充材料
+            </Button>
+          ) : (
+            <View className={styles.supplementForm}>
+              <Text className={styles.formTitle}>补充材料</Text>
+              <Input
+                className={styles.formInput}
+                placeholder="补充链接（可选）"
+                value={suppMediaUrl}
+                onInput={(e) => setSuppMediaUrl(e.detail.value)}
+              />
+              <View className={styles.formUploadRow}>
+                {suppScreenshots.map((url, index) => (
+                  <View key={index} className={styles.formUploadItem}>
+                    <Image className={styles.uploadImg} src={url} mode="aspectFill" />
+                    <View className={styles.deleteBtn} onClick={() => handleSuppDeleteImage(index)}>✕</View>
+                  </View>
                 ))}
+                {suppScreenshots.length < 9 && (
+                  <View className={styles.formUploadAdd} onClick={handleSuppChooseImage}>
+                    <Text className={styles.addIcon}>+</Text>
+                    <Text className={styles.addText}>上传</Text>
+                  </View>
+                )}
               </View>
-            )}
-          </View>
-        )}
+              <Textarea
+                className={styles.formTextarea}
+                placeholder="补充文字说明..."
+                value={suppContent}
+                onInput={(e) => setSuppContent(e.detail.value)}
+                maxlength={1000}
+              />
+              <View className={styles.formActions}>
+                <Button className={styles.formCancelBtn} onClick={() => setShowSupplementForm(false)}>
+                  取消
+                </Button>
+                <Button className={styles.formSubmitBtn} onClick={handleSuppSubmit}>
+                  提交补充
+                </Button>
+              </View>
+            </View>
+          )}
+        </View>
+      )}
+
+      {/* 处理时间线 */}
+      <View className={styles.section}>
+        <Text className={styles.sectionTitle}>处理时间线</Text>
+        <View className={styles.timelineList}>
+          {clue.timeline.map((event) => (
+            <View
+              key={event.id}
+              className={classnames(styles.timelineItem, timelineTypeClass[event.type])}
+            >
+              <Text className={styles.timelineOperator}>{event.operator}</Text>
+              <Text className={styles.timelineTime}>{event.timestamp}</Text>
+              <View style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                {event.status && (
+                  <View className={classnames(styles.timelineStatusBadge, styles[event.status])}>
+                    {statusLabels[event.status]}
+                  </View>
+                )}
+                <Text className={styles.timelineContent}>{event.content}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
       </View>
     </ScrollView>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import type { ClueCategory } from '@/types/clue';

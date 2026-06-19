@@ -122,95 +122,144 @@
   border-radius: $radius-md;
   overflow: hidden;
   background: $color-bg-section;
-  position: relative;
 
   .screenshotImg {
     width: 100%;
     height: 100%;
     display: block;
   }
+}
 
-  .screenshotPlaceholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48rpx;
+.timelineList {
+  position: relative;
+  padding-left: 40rpx;
+}
+
+.timelineItem {
+  position: relative;
+  padding-bottom: $spacing-lg;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -28rpx;
+    top: 16rpx;
+    width: 16rpx;
+    height: 16rpx;
+    border-radius: 50%;
+    background: $color-primary;
+    z-index: 1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: -22rpx;
+    top: 36rpx;
+    width: 4rpx;
+    height: calc(100% - 20rpx);
+    background: $color-border;
+  }
+
+  &:last-child::after {
+    display: none;
+  }
+
+  &.submit::before {
+    background: $color-primary;
+  }
+
+  &.statusChange::before {
+    background: $color-warning;
+  }
+
+  &.supplement::before {
+    background: $color-success;
   }
 }
 
-.feedbackSection {
-  border-left: 6rpx solid $color-primary;
-  padding-left: $spacing-md;
-}
-
-.feedbackLabel {
+.timelineOperator {
   font-size: $font-size-sm;
-  color: $color-primary;
   font-weight: $font-weight-semibold;
-  margin-bottom: $spacing-sm;
-}
-
-.feedbackText {
-  font-size: $font-size-md;
   color: $color-text-primary;
-  line-height: $line-height-loose;
+  margin-bottom: 4rpx;
 }
 
-.analysisBadge {
+.timelineTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xs;
+}
+
+.timelineContent {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.timelineStatusBadge {
   display: inline-flex;
   align-items: center;
-  gap: 8rpx;
-  padding: 8rpx 20rpx;
+  padding: 2rpx 12rpx;
   border-radius: $radius-round;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   font-weight: $font-weight-medium;
-  margin-top: $spacing-md;
+  margin-right: $spacing-xs;
 
-  &.high {
-    background: $color-error-bg;
-    color: $color-error;
+  &.pending {
+    background: $color-bg-section;
+    color: $color-text-secondary;
   }
 
-  &.medium {
+  &.adopted {
+    background: $color-success-bg;
+    color: $color-success;
+  }
+
+  &.supplement {
     background: $color-warning-bg;
     color: $color-warning;
   }
 
-  &.low {
-    background: $color-success-bg;
-    color: $color-success;
+  &.closed {
+    background: $color-bg-section;
+    color: $color-text-tertiary;
   }
 }
 
-.supplementList {
-  margin-top: $spacing-md;
-  background: $color-warning-bg;
+.supplementCard {
+  background: $color-bg-section;
   border-radius: $radius-md;
   padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  border-left: 6rpx solid $color-success;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
-.supplementTitle {
-  font-size: $font-size-sm;
+.supplementLabel {
+  font-size: $font-size-xs;
+  color: $color-success;
   font-weight: $font-weight-semibold;
-  color: $color-warning;
+  margin-bottom: $spacing-xs;
+}
+
+.supplementTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
   margin-bottom: $spacing-sm;
 }
 
-.supplementItem {
+.supplementText {
   font-size: $font-size-sm;
-  color: $color-text-secondary;
-  line-height: $line-height-loose;
-  position: relative;
-  padding-left: $spacing-md;
-
-  &::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: $color-warning;
-  }
+  color: $color-text-primary;
+  line-height: $line-height-normal;
 }
 
 .pendingTip {
@@ -227,5 +276,164 @@
   .tipText {
     font-size: $font-size-sm;
     color: $color-text-secondary;
+    line-height: $line-height-normal;
+  }
+}
+
+.addSupplementBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-md;
+  background: $color-primary-bg;
+  color: $color-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+  border: 2rpx solid $color-primary;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.supplementForm {
+  background: $color-primary-bg;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  border: 2rpx solid rgba($color-primary, 0.2);
+}
+
+.formTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  margin-bottom: $spacing-md;
+}
+
+.formInput {
+  width: 100%;
+  min-height: 80rpx;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  margin-bottom: $spacing-md;
+
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.formTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  box-sizing: border-box;
+  margin-bottom: $spacing-md;
+
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.formUploadRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.formUploadItem {
+  position: relative;
+  width: calc(25% - 12rpx);
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $color-bg-card;
+
+  .uploadImg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .deleteBtn {
+    position: absolute;
+    top: 4rpx;
+    right: 4rpx;
+    width: 32rpx;
+    height: 32rpx;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: $color-text-white;
+    font-size: 20rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.formUploadAdd {
+  width: calc(25% - 12rpx);
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  border: 2rpx dashed $color-border;
+  background: $color-bg-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .addIcon {
+    font-size: 36rpx;
+    color: $color-text-tertiary;
+  }
+
+  .addText {
+    font-size: 20rpx;
+    color: $color-text-tertiary;
+  }
+}
+
+.formActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.formSubmitBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-sm;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.formCancelBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-sm;
+  background: $color-bg-card;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  border-radius: $radius-button;
+  border: 2rpx solid $color-border;
+
+  &:active {
+    opacity: 0.8;
   }
 }
