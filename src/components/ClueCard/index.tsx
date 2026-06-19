@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import CategoryTag from '@/components/CategoryTag';
 import UrgencyBadge from '@/components/UrgencyBadge';
@@ -10,19 +9,12 @@ import type { Clue } from '@/types/clue';
 interface ClueCardProps {
   clue: Clue;
   showFeedback?: boolean;
+  onClick?: () => void;
 }
 
-const ClueCard: React.FC<ClueCardProps> = ({ clue, showFeedback = true }) => {
-  const handleClick = () => {
-    console.log('[ClueCard] 点击线索:', clue.id);
-    Taro.showToast({
-      title: '查看详情功能开发中',
-      icon: 'none'
-    });
-  };
-
+const ClueCard: React.FC<ClueCardProps> = ({ clue, showFeedback = true, onClick }) => {
   return (
-    <View className={styles.card} onClick={handleClick}>
+    <View className={styles.card} onClick={onClick}>
       <View className={styles.header}>
         <Text className={styles.title}>{clue.title}</Text>
         <UrgencyBadge level={clue.urgency} />

@@ -4,7 +4,7 @@ import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import ClueCard from '@/components/ClueCard';
-import { mockClues } from '@/data/mockClues';
+import { useClue } from '@/store/clueContext';
 import type { ClueStatus } from '@/types/clue';
 import { statusLabels } from '@/types/clue';
 
@@ -17,25 +17,33 @@ const filterOptions: Array<{ key: 'all' | ClueStatus; label: string }> = [
 ];
 
 const FeedbackPage: React.FC = () => {
+  const { clues } = useClue();
   const [currentFilter, setCurrentFilter] = useState<'all' | ClueStatus>('all');
 
   const filteredClues = useMemo(() => {
-    if (currentFilter === 'all') return mockClues;
-    return mockClues.filter((clue) => clue.status === currentFilter);
-  }, [currentFilter]);
+    if (currentFilter === 'all') return clues;
+    return clues.filter((clue) => clue.status === currentFilter);
+  }, [currentFilter, clues]);
 
   const stats = useMemo(() => {
     return {
-      total: mockClues.length,
-      adopted: mockClues.filter((c) => c.status === 'adopted').length,
-      pending: mockClues.filter((c) => c.status === 'pending' || c.status === 'supplement').length
+      total: clues.length,
+      adopted: clues.filter((c) => c.status === 'adopted').length,
+      pending: clues.filter((c) => c.status === 'pending' || c.status === 'supplement').length
     };
-  }, []);
+  }, [clues]);
 
   const handleGoReport = () => {
     console.log('[FeedbackPage] 跳转到发现线索页');
     Taro.switchTab({
       url: '/pages/report/index'
+    });
+  };
+
+  const handleCardClick = (id: string) => {
+    console.log('[FeedbackPage] 点击线索:', id);
+    Taro.navigateTo({
+      url: `/pages/detail/index?id=${id}`
     });
   };
 
@@ -46,7 +54,6 @@ const FeedbackPage: React.FC = () => {
         <Text className={styles.subtitle}>查看你提交的线索处理进展</Text>
       </View>
 
-      {/* 统计卡片 */}
       <View className={styles.statsRow}>
         <View className={styles.statCard}>
           <Text className={styles.statNum}>{stats.total}</Text>
@@ -62,7 +69,6 @@ const FeedbackPage: React.FC = () => {
         </View>
       </View>
 
-      {/* 筛选标签 */}
       <ScrollView className={styles.filterRow} scrollX enhanced showScrollbar={false}>
         {filterOptions.map((option) => (
           <View
@@ -75,9 +81,10 @@ const FeedbackPage: React.FC = () => {
         ))}
       </ScrollView>
 
-      {/* 线索列表 */}
       {filteredClues.length > 0 ? (
-        filteredClues.map((clue) => <ClueCard key={clue.id} clue={clue} />)
+        filteredClues.map((clue) => (
+          <ClueCard key={clue.id} clue={clue} onClick={() => handleCardClick(clue.id)} />
+        ))
       ) : (
         <View className={styles.emptyState}>
           <Text className={styles.emptyIcon}>📭</Text>

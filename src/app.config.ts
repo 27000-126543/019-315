@@ -2,7 +2,8 @@ export default defineAppConfig({
   pages: [
     'pages/report/index',
     'pages/feedback/index',
-    'pages/risks/index'
+    'pages/risks/index',
+    'pages/detail/index'
   ],
   window: {
     backgroundTextStyle: 'light',
