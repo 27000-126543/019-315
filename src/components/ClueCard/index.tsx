@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import CategoryTag from '@/components/CategoryTag';
 import UrgencyBadge from '@/components/UrgencyBadge';
 import StatusBadge from '@/components/StatusBadge';
+import { useClue } from '@/store/clueContext';
 import type { Clue } from '@/types/clue';
 
 interface ClueCardProps {
@@ -13,15 +15,34 @@ interface ClueCardProps {
 }
 
 const ClueCard: React.FC<ClueCardProps> = ({ clue, showFeedback = true, onClick }) => {
+  const { toggleStar } = useClue();
   const latestFeedback = clue.timeline
     .filter((e) => e.type === 'status_change')
     .pop();
 
+  const handleStarClick = (e) => {
+    e.stopPropagation();
+    console.log('[ClueCard] 切换标星:', clue.id);
+    toggleStar(clue.id);
+    Taro.showToast({
+      title: clue.isStarred ? '已取消关注' : '已关注',
+      icon: 'none',
+      duration: 1000
+    });
+  };
+
   return (
     <View className={styles.card} onClick={onClick}>
       <View className={styles.header}>
-        <Text className={styles.title}>{clue.title}</Text>
-        <UrgencyBadge level={clue.urgency} />
+        <View className={styles.titleRow}>
+          <Text className={styles.starBtn} onClick={handleStarClick}>
+            {clue.isStarred ? '⭐' : '☆'}
+          </Text>
+          <Text className={styles.title}>{clue.title}</Text>
+        </View>
+        <View className={styles.urgencyWrap}>
+          <UrgencyBadge level={clue.urgency} />
+        </View>
       </View>
 
       <View className={styles.meta}>
@@ -29,7 +50,7 @@ const ClueCard: React.FC<ClueCardProps> = ({ clue, showFeedback = true, onClick 
         <StatusBadge status={clue.status} />
       </View>
 
-      <Text className={styles.summary}>{clue.content}</Text>
+      <Text className={styles.summary}>{clue.content || '（无文字描述）'}</Text>
 
       {showFeedback && latestFeedback && (
         <View className={styles.feedbackPreview}>

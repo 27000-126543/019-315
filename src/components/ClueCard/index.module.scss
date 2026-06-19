@@ -19,15 +19,39 @@
   margin-bottom: $spacing-md;
 }
 
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+  margin-right: $spacing-sm;
+}
+
+.starBtn {
+  font-size: 36rpx;
+  line-height: 1;
+  margin-right: $spacing-sm;
+  padding: 0;
+  background: none;
+  border: none;
+  flex-shrink: 0;
+
+  &:active {
+    transform: scale(1.2);
+  }
+}
+
 .title {
   flex: 1;
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
   line-height: $line-height-tight;
-  margin-right: $spacing-md;
 
   @include text-ellipsis-multi(2);
+}
+
+.urgencyWrap {
+  flex-shrink: 0;
 }
 
 .meta {

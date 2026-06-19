@@ -14,9 +14,11 @@ export const mockClues: Clue[] = [
     status: 'adopted',
     createdAt: '2024-01-15 09:30',
     analysisLevel: 'high',
+    isStarred: true,
+    currentRound: 1,
     timeline: [
-      { id: 't1', type: 'submit', content: '线索已提交', operator: '现场人员', timestamp: '2024-01-15 09:30' },
-      { id: 't2', type: 'status_change', status: 'adopted', content: '已纳入今日舆情专报，总部正在协调公关团队回应。请继续关注当地社交媒体讨论热度变化。', operator: '总部舆情中心', timestamp: '2024-01-15 14:20' }
+      { id: 't1', type: 'submit', content: '线索已提交', operator: '现场人员', operatorRole: 'field', timestamp: '2024-01-15 09:30', round: 1 },
+      { id: 't2', type: 'status_change', status: 'adopted', content: '已纳入今日舆情专报，总部正在协调公关团队回应。请继续关注当地社交媒体讨论热度变化。', operator: '总部舆情中心', operatorRole: 'headquarters', timestamp: '2024-01-15 14:20', round: 1 }
     ],
     supplements: []
   },
@@ -32,9 +34,11 @@ export const mockClues: Clue[] = [
     status: 'supplement',
     createdAt: '2024-01-14 16:45',
     analysisLevel: 'medium',
+    isStarred: false,
+    currentRound: 1,
     timeline: [
-      { id: 't3', type: 'submit', content: '线索已提交', operator: '现场人员', timestamp: '2024-01-14 16:45' },
-      { id: 't4', type: 'status_change', status: 'supplement', content: '请补充以下信息以便研判：1. 罢工具体日期和参与人数预估；2. 是否涉及我项目具体劳工；3. 工会主要诉求原文翻译。', operator: '总部舆情中心', timestamp: '2024-01-14 19:10' }
+      { id: 't3', type: 'submit', content: '线索已提交', operator: '现场人员', operatorRole: 'field', timestamp: '2024-01-14 16:45', round: 1 },
+      { id: 't4', type: 'status_change', status: 'supplement', content: '请补充以下信息以便研判：1. 罢工具体日期和参与人数预估；2. 是否涉及我项目具体劳工；3. 工会主要诉求原文翻译。', operator: '总部舆情中心', operatorRole: 'headquarters', timestamp: '2024-01-14 19:10', round: 1 }
     ],
     supplements: []
   },
@@ -49,8 +53,10 @@ export const mockClues: Clue[] = [
     urgency: 'medium',
     status: 'pending',
     createdAt: '2024-01-16 11:20',
+    isStarred: false,
+    currentRound: 1,
     timeline: [
-      { id: 't5', type: 'submit', content: '线索已提交', operator: '现场人员', timestamp: '2024-01-16 11:20' }
+      { id: 't5', type: 'submit', content: '线索已提交', operator: '现场人员', operatorRole: 'field', timestamp: '2024-01-16 11:20', round: 1 }
     ],
     supplements: []
   },
@@ -67,9 +73,11 @@ export const mockClues: Clue[] = [
     status: 'adopted',
     createdAt: '2024-01-13 08:15',
     analysisLevel: 'high',
+    isStarred: true,
+    currentRound: 1,
     timeline: [
-      { id: 't6', type: 'submit', content: '线索已提交', operator: '现场人员', timestamp: '2024-01-13 08:15' },
-      { id: 't7', type: 'status_change', status: 'adopted', content: '已转交新闻部门跟进。建议我方保持低调，不主动回应。密切关注是否有其他政客跟进表态。', operator: '总部舆情中心', timestamp: '2024-01-13 11:40' }
+      { id: 't6', type: 'submit', content: '线索已提交', operator: '现场人员', operatorRole: 'field', timestamp: '2024-01-13 08:15', round: 1 },
+      { id: 't7', type: 'status_change', status: 'adopted', content: '已转交新闻部门跟进。建议我方保持低调，不主动回应。密切关注是否有其他政客跟进表态。', operator: '总部舆情中心', operatorRole: 'headquarters', timestamp: '2024-01-13 11:40', round: 1 }
     ],
     supplements: []
   },
@@ -86,10 +94,12 @@ export const mockClues: Clue[] = [
     status: 'closed',
     createdAt: '2024-01-10 14:30',
     analysisLevel: 'low',
+    isStarred: false,
+    currentRound: 2,
     timeline: [
-      { id: 't8', type: 'submit', content: '线索已提交', operator: '现场人员', timestamp: '2024-01-10 14:30' },
-      { id: 't9', type: 'status_change', status: 'adopted', content: '已收到，正在研判中。', operator: '总部舆情中心', timestamp: '2024-01-10 17:00' },
-      { id: 't10', type: 'status_change', status: 'closed', content: '经研判，该视频整体中立，负面评论占比较低（约8%），属正常舆论范畴，无需特别处置。已归档。', operator: '总部舆情中心', timestamp: '2024-01-12 09:30' }
+      { id: 't8', type: 'submit', content: '线索已提交', operator: '现场人员', operatorRole: 'field', timestamp: '2024-01-10 14:30', round: 1 },
+      { id: 't9', type: 'status_change', status: 'adopted', content: '已收到，正在研判中。', operator: '总部舆情中心', operatorRole: 'headquarters', timestamp: '2024-01-10 17:00', round: 1 },
+      { id: 't10', type: 'status_change', status: 'closed', content: '经研判，该视频整体中立，负面评论占比较低（约8%），属正常舆论范畴，无需特别处置。已归档。', operator: '总部舆情中心', operatorRole: 'headquarters', timestamp: '2024-01-12 09:30', round: 2 }
     ],
     supplements: []
   },
@@ -106,15 +116,19 @@ export const mockClues: Clue[] = [
     status: 'supplement',
     createdAt: '2024-01-12 10:00',
     analysisLevel: 'medium',
+    isStarred: false,
+    currentRound: 1,
     timeline: [
-      { id: 't11', type: 'submit', content: '线索已提交', operator: '现场人员', timestamp: '2024-01-12 10:00' },
-      { id: 't12', type: 'status_change', status: 'supplement', content: '请补充：1. 该媒体的影响力和受众群体；2. 是否有其他媒体转载；3. 报道中提到的具体数据是否准确。', operator: '总部舆情中心', timestamp: '2024-01-12 15:20' }
+      { id: 't11', type: 'submit', content: '线索已提交', operator: '现场人员', operatorRole: 'field', timestamp: '2024-01-12 10:00', round: 1 },
+      { id: 't12', type: 'status_change', status: 'supplement', content: '请补充：1. 该媒体的影响力和受众群体；2. 是否有其他媒体转载；3. 报道中提到的具体数据是否准确。', operator: '总部舆情中心', operatorRole: 'headquarters', timestamp: '2024-01-12 15:20', round: 1 }
     ],
     supplements: [
       {
         id: 's1',
         content: '该媒体是本地第三大独立媒体，主要受众为中产阶级和知识界。暂未发现其他媒体转载。报道中提到的工资数据基本属实，但对比方式不够公平。',
-        createdAt: '2024-01-13 09:45'
+        createdAt: '2024-01-13 09:45',
+        replyToTimelineId: 't12',
+        round: 1
       }
     ]
   }

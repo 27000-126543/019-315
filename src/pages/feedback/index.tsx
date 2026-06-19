@@ -46,9 +46,11 @@ const FeedbackPage: React.FC = () => {
   }, [clues]);
 
   const [locationFilter, setLocationFilter] = useState('all');
+  const [starredOnly, setStarredOnly] = useState(false);
 
   const filteredClues = useMemo(() => {
     return clues.filter((clue) => {
+      if (starredOnly && !clue.isStarred) return false;
       if (statusFilter !== 'all' && clue.status !== statusFilter) return false;
       if (categoryFilter !== 'all' && clue.category !== categoryFilter) return false;
       if (urgencyFilter !== 'all' && clue.urgency !== urgencyFilter) return false;
@@ -70,7 +72,7 @@ const FeedbackPage: React.FC = () => {
       }
       return true;
     });
-  }, [clues, statusFilter, categoryFilter, urgencyFilter, locationFilter, keyword]);
+  }, [clues, starredOnly, statusFilter, categoryFilter, urgencyFilter, locationFilter, keyword]);
 
   const stats = useMemo(() => {
     return {
@@ -81,6 +83,7 @@ const FeedbackPage: React.FC = () => {
   }, [clues]);
 
   const hasActiveFilter =
+    starredOnly ||
     statusFilter !== 'all' ||
     categoryFilter !== 'all' ||
     urgencyFilter !== 'all' ||
@@ -88,6 +91,7 @@ const FeedbackPage: React.FC = () => {
     keyword.trim() !== '';
 
   const clearAllFilters = () => {
+    setStarredOnly(false);
     setStatusFilter('all');
     setCategoryFilter('all');
     setUrgencyFilter('all');
@@ -145,6 +149,12 @@ const FeedbackPage: React.FC = () => {
       {/* 状态筛选 */}
       <View className={styles.filterSection}>
         <View className={styles.filterRow}>
+          <View
+            className={classnames(styles.filterTag, starredOnly && styles.active)}
+            onClick={() => setStarredOnly(!starredOnly)}
+          >
+            {starredOnly ? '⭐ 我的关注' : '☆ 我的关注'}
+          </View>
           {statusFilters.map((f) => (
             <View
               key={f.key}

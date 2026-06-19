@@ -27,12 +27,25 @@
   color: $color-text-white;
   padding: $spacing-xl $spacing-lg;
 
+  .titleRow {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  .starBtn {
+    font-size: 40rpx;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
   .title {
+    flex: 1;
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
     color: $color-text-white;
     line-height: $line-height-tight;
-    margin-bottom: $spacing-md;
   }
 
   .metaRow {
@@ -180,6 +193,14 @@
   &.supplement::before {
     background: $color-success;
   }
+
+  &.headquarters::before {
+    background: $color-warning;
+  }
+
+  &.field::before {
+    background: $color-primary;
+  }
 }
 
 .timelineOperator {
@@ -231,16 +252,52 @@
   }
 }
 
-.supplementCard {
+.roundCard {
   background: $color-bg-section;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   padding: $spacing-md;
   margin-bottom: $spacing-md;
-  border-left: 6rpx solid $color-success;
+  border-left: 6rpx solid $color-warning;
+
+  &.roundSupplement {
+    border-left-color: $color-success;
+  }
 
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+.roundHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.roundLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.roundTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.roundContent {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.supplementCard {
+  background: $color-success-bg;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-top: $spacing-sm;
+  border-left: 6rpx solid $color-success;
 }
 
 .supplementLabel {
@@ -436,4 +493,118 @@
   &:active {
     opacity: 0.8;
   }
+}
+
+.hqPanel {
+  background: $color-warning-bg;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  border: 2rpx solid rgba($color-warning, 0.3);
+}
+
+.hqPanelTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-warning;
+  margin-bottom: $spacing-md;
+}
+
+.hqStatusRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.hqStatusItem {
+  flex: 1;
+  min-width: calc(25% - 12rpx);
+  padding: $spacing-sm;
+  text-align: center;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    font-weight: $font-weight-semibold;
+    border-color: $color-warning;
+  }
+
+  &.pending.active {
+    background: $color-bg-section;
+    color: $color-text-secondary;
+    border-color: $color-text-secondary;
+  }
+
+  &.adopted.active {
+    background: $color-success-bg;
+    color: $color-success;
+    border-color: $color-success;
+  }
+
+  &.supplement.active {
+    background: $color-warning-bg;
+    color: $color-warning;
+    border-color: $color-warning;
+  }
+
+  &.closed.active {
+    background: $color-bg-section;
+    color: $color-text-tertiary;
+    border-color: $color-text-tertiary;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.hqTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  box-sizing: border-box;
+  margin-bottom: $spacing-md;
+
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.hqSubmitBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-sm;
+  background: $color-warning;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-button;
+
+  &:active {
+    opacity: 0.9;
+  }
+
+  &.disabled {
+    background: $color-text-disabled;
+  }
+}
+
+.replyTargetHint {
+  background: $color-warning-bg;
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  margin-bottom: $spacing-md;
+  font-size: $font-size-xs;
+  color: $color-warning;
+  line-height: $line-height-normal;
 }

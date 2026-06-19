@@ -19,7 +19,9 @@ export interface TimelineEvent {
   status?: ClueStatus;
   content: string;
   operator: string;
+  operatorRole: 'headquarters' | 'field';
   timestamp: string;
+  round?: number;
 }
 
 export interface SupplementData {
@@ -28,6 +30,8 @@ export interface SupplementData {
   mediaUrl?: string;
   screenshots?: string[];
   createdAt: string;
+  replyToTimelineId: string;
+  round: number;
 }
 
 export interface Clue {
@@ -44,8 +48,10 @@ export interface Clue {
   status: ClueStatus;
   createdAt: string;
   analysisLevel?: 'high' | 'medium' | 'low';
+  isStarred: boolean;
   timeline: TimelineEvent[];
   supplements: SupplementData[];
+  currentRound: number;
 }
 
 export interface RiskItem {
