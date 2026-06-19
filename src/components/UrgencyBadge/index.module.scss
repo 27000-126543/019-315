@@ -1,0 +1,26 @@
+@use '@/styles/variables.scss' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+
+  &.high {
+    background: $color-error-bg;
+    color: $color-error;
+  }
+
+  &.medium {
+    background: $color-warning-bg;
+    color: $color-warning;
+  }
+
+  &.low {
+    background: $color-success-bg;
+    color: $color-success;
+  }
+}

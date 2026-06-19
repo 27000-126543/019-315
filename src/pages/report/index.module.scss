@@ -1,0 +1,305 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  padding: $spacing-lg $page-padding calc(#{$button-height-lg} + #{$spacing-xl} + 120rpx);
+  background: $color-bg-page;
+}
+
+.header {
+  margin-bottom: $spacing-lg;
+
+  .title {
+    font-size: $font-size-xxl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+}
+
+.section {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  .sectionDesc {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    margin-bottom: $spacing-md;
+    line-height: $line-height-normal;
+  }
+}
+
+.input {
+  width: 100%;
+  min-height: 80rpx;
+  padding: $spacing-md;
+  background: $color-bg-section;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.textarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: $spacing-md;
+  background: $color-bg-section;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.uploadArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 200rpx;
+  background: $color-bg-section;
+  border-radius: $radius-md;
+  border: 2rpx dashed $color-border;
+
+  .uploadIcon {
+    font-size: 48rpx;
+    margin-bottom: $spacing-sm;
+  }
+
+  .uploadText {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.categoryGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.categoryItem {
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-section;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-primary-bg;
+    color: $color-primary;
+    border-color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.urgencyRow {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.urgencyItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md $spacing-sm;
+  background: $color-bg-section;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  .urgencyLabel {
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    margin-bottom: 4rpx;
+  }
+
+  .urgencyDesc {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+
+  &.high {
+    &.active {
+      background: $color-error-bg;
+      border-color: $color-error;
+
+      .urgencyLabel {
+        color: $color-error;
+      }
+    }
+
+    .urgencyLabel {
+      color: $color-error;
+    }
+  }
+
+  &.medium {
+    &.active {
+      background: $color-warning-bg;
+      border-color: $color-warning;
+
+      .urgencyLabel {
+        color: $color-warning;
+      }
+    }
+
+    .urgencyLabel {
+      color: $color-warning;
+    }
+  }
+
+  &.low {
+    &.active {
+      background: $color-success-bg;
+      border-color: $color-success;
+
+      .urgencyLabel {
+        color: $color-success;
+      }
+    }
+
+    .urgencyLabel {
+      color: $color-success;
+    }
+  }
+}
+
+.infoRow {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoItem {
+  flex: 1;
+
+  .infoLabel {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .infoInput {
+    width: 100%;
+    height: 80rpx;
+    padding: 0 $spacing-md;
+    background: $color-bg-section;
+    border-radius: $radius-md;
+    font-size: $font-size-md;
+    color: $color-text-primary;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: $color-text-tertiary;
+    }
+  }
+}
+
+.spreadRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin-top: $spacing-xs;
+}
+
+.spreadItem {
+  flex: 1;
+  padding: $spacing-sm 0;
+  text-align: center;
+  background: $color-bg-section;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-primary-bg;
+    color: $color-primary;
+    border-color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.submitBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+
+  .submitBtn {
+    @include button-reset;
+    width: 100%;
+    height: $button-height-lg;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    border-radius: $radius-button;
+
+    &:active {
+      opacity: 0.9;
+      transform: scale(0.98);
+    }
+
+    &.disabled {
+      background: $color-text-disabled;
+    }
+  }
+}
+
+.tipText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  text-align: center;
+  margin-top: $spacing-sm;
+}

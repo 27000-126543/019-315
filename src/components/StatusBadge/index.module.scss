@@ -1,0 +1,31 @@
+@use '@/styles/variables.scss' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 18rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+
+  &.pending {
+    background: $color-bg-section;
+    color: $color-text-secondary;
+  }
+
+  &.adopted {
+    background: $color-success-bg;
+    color: $color-success;
+  }
+
+  &.supplement {
+    background: $color-warning-bg;
+    color: $color-warning;
+  }
+
+  &.closed {
+    background: $color-bg-section;
+    color: $color-text-tertiary;
+  }
+}
